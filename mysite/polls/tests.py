@@ -10,8 +10,8 @@ class PollsModelTest(TestCase):
     
     def test_saving_and_retrieving_items(self):
         first_question = Question()
-        first_question.question_text="What's new?"
-        first_question.pub_date=timezone.now()
+        first_question.question_text = "What's new?"
+        first_question.pub_date = timezone.now()
         first_question.save()
 
         saved_items = Question.objects.all()
@@ -19,7 +19,7 @@ class PollsModelTest(TestCase):
 
         second_question = Question()
         second_question.question_text = "What's up?"
-        second_question.pub_date=timezone.now()
+        second_question.pub_date = timezone.now()
         second_question.save()
 
         saved_items = Question.objects.all()
@@ -29,6 +29,11 @@ class PollsModelTest(TestCase):
         second_saved_item = saved_items[1]
         self.assertEqual(first_saved_item.question_text, "What's new?")
         self.assertEqual(second_saved_item.question_text, "What's up?")
+        self.assertEqual(second_saved_item.pub_date, second_question.pub_date )
+        # to test __str__
+        #self.assertIn(str(first_saved_item,) "What's new?")
+        #self.assertEqual(second_saved_item, "<Question: What's up?>")
+        
 
 class SmokeTest(TestCase):
     

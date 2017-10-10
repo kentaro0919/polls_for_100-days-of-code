@@ -99,3 +99,7 @@ ENV/
 
 # mypy
 .mypy_cache/
+mysite/db.sqlite3
+.vscode/tags
+.vscode/settings.json
+mysite/db.sqlite3
