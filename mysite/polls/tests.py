@@ -30,10 +30,51 @@ class PollsModelTest(TestCase):
         self.assertEqual(first_saved_item.question_text, "What's new?")
         self.assertEqual(second_saved_item.question_text, "What's up?")
         self.assertEqual(second_saved_item.pub_date, second_question.pub_date )
-        # to test __str__
-        #self.assertIn(str(first_saved_item,) "What's new?")
-        #self.assertEqual(second_saved_item, "<Question: What's up?>")
+
         
+    def test_was_published_recentlyd_true(self):
+        first_question = Question()
+        first_question.question_text = "have to be True"
+        first_question.pub_date = timezone.now()
+        first_question.save()
+
+        saved_item = Question.objects.all().first()
+
+        self.assertTrue(saved_item.was_published_recently())
+
+    def test_was_published_recentlyd_false(self):
+        question = Question()
+        question.question_text = "have to be False"
+        question.pub_date = datetime.datetime(2015, 1, 1, 12, 30, 59, 0, timezone.utc)
+        question.save()
+
+        saved_item = Question.objects.all().first()
+
+        self.assertFalse(saved_item.was_published_recently())
+
+    def test_question_has_chice(self):
+        question = Question()
+        question.question_text = "has choice"
+        question.pub_date = timezone.now()
+        question.save()
+
+        question.choice_set.create(choice_text='Not much', votes=0)
+        question.choice_set.create(choice_text='The sky', votes=0)
+
+        saved_item = Question.objects.get(pk=1)
+
+        self.assertEqual(saved_item.choice_set.count(), 2)
+        self.assertEqual(saved_item.choice_set.first().choice_text, 'Not much')
+
+
+    def test_str(self):
+        question = Question()
+        question.question_text = "What's new?"
+        question.pub_date = timezone.now()
+        question.save()
+
+        saved_item = Question.objects.all().first()
+        self.assertEqual(saved_item.__str__(), "What's new?")
 
 class SmokeTest(TestCase):
     
