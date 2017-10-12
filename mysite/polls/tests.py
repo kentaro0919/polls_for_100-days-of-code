@@ -5,8 +5,34 @@ from django.http import HttpRequest
 from polls.models import Question, Choice
 import datetime
 from django.utils import timezone
+from selenium import webdriver
 
-class WritingMoreViewstes(TestCase):
+
+class ViewIndexQuestionTest(TestCase):
+    
+    def setUp(self):
+        pass
+
+    def tearDown(self):
+        pass
+
+    def test_index_view_with_0(self):
+        count_0 = Question.objects.all().count()           
+        self.assertEqual(count_0, 0)
+
+    def test_index_view_text_with_0(self):
+        response = self.client.get('/polls/')
+        self.assertIn("No polls are available.", response.content.decode())
+        
+    def test_index_view_text_with_1(self):
+        Question.objects.create(question_text="first", pub_date=timezone.now())
+        count_0 = Question.objects.all().count()           
+        self.assertEqual(count_0, 1)
+        response = self.client.get('/polls/')
+        self.assertIn("first", response.content.decode())
+   
+
+class WritingMoreViewstest(TestCase):
     
     def setUp(self):
         pass
@@ -113,6 +139,5 @@ class SmokeTest(TestCase):
         response = index(request)
         html = response.content.decode('utf8')
         self.assertTrue(html.startswith('<!DOCTYPE html>'))
-        self.assertIn('<h1 id="tt">Hello, world. Youre at the polls index.</h1>', html)
         self.assertTrue(html.endswith('</html>')) 
 
