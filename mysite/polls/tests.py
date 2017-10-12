@@ -6,6 +6,32 @@ from polls.models import Question, Choice
 import datetime
 from django.utils import timezone
 
+class WritingMoreViewstes(TestCase):
+    
+    def setUp(self):
+        pass
+
+    def tearDown(self):
+        pass
+
+    def test_detail_view(self):
+        response = self.client.get("/polls/5/")
+        #self.assertTemplateUsed(response, 'polls/index.html')
+        #print(type(response))
+        #print(help(response))
+        self.assertEqual("You're looking at question 5.", response.content.decode('utf8'))
+
+    def test_results_view(self):
+        response = self.client.get("/polls/5/results/")
+        #elf.assertTemplateUsed(response, 'polls/index.html')
+        self.assertIn("You're looking at the results of question 5", response.content.decode('utf8'))
+
+
+    def test_vote_view(self):
+        response = self.client.get("/polls/5/vote/")
+        #self.assertTemplateUsed(response, 'polls/index.html')
+        self.assertIn("You're voting on question 5.", response.content.decode('utf8'))
+
 class PollsModelTest(TestCase):
     
     def test_saving_and_retrieving_items(self):
