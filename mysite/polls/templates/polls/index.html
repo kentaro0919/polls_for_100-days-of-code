@@ -3,22 +3,35 @@
 
 <head>
     <meta charset="UTF-8">
+    <script type="text/javascript" src="https://raw.githubusercontent.com/js-cookie/blob/master/src/js.cookie.js">
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 </head>
 
 <body>
-    <h1 id="tt">Hello, world. You're at the polls index.</h1>
+    <header></header>
+    <nav></nav>
+    <h1 id="TopTitle">Hello, world. You're at the polls index.</h1>
     {% if latest_question_list %}
-    <ul>
-    {% for question in latest_question_list %}
-        <li><a href="/polls/{{ question.id }}/">{{ question.question_text }}</a></li>
-    {% endfor %}
-    </ul>
-    {% else %}
-    <p id="no latest_question_list">No polls are available.</p>
-    {% endif %}
+    <article>
+        <section>
+            <ul>
+                {% for question in latest_question_list %}
+                <li id='question-{{ question.id }}'>
+                    <a href="{% url 'detail' question.id %}">{{ question.question_text }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </section>
+        <section>
+            {% else %}
+            <p id="no latest_question_list">No polls are available.</p>
+            {% endif %}
+        </section>
+    </article>
+    <footer></footer>
 </body>
 
 </html>

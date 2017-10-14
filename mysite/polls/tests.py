@@ -9,20 +9,24 @@ from hypothesis.extra.django.models import models
 
 
 class SixQuestionTest(TestCase):
-    
 
     def setUp(self):
-        q0 = Question.objects.create(question_text="zero", pub_date=timezone.now())
-        q1 = Question.objects.create(question_text="one", pub_date=timezone.now())
-        q2 = Question.objects.create(question_text="tow", pub_date=timezone.now())
-        q3 = Question.objects.create(question_text="tree", pub_date=timezone.now())
-        q4 = Question.objects.create(question_text="four", pub_date=timezone.now())
-        q5 = Question.objects.create(question_text="five", pub_date=timezone.now())
+        q0 = Question.objects.create(question_text="zero",
+                                     pub_date=timezone.now())
+        q1 = Question.objects.create(question_text="one",
+                                     pub_date=timezone.now())
+        q2 = Question.objects.create(question_text="tow",
+                                     pub_date=timezone.now())
+        q3 = Question.objects.create(question_text="tree",
+                                     pub_date=timezone.now())
+        q4 = Question.objects.create(question_text="four",
+                                     pub_date=timezone.now())
+        q5 = Question.objects.create(question_text="five",
+                                     pub_date=timezone.now())
 
     def question_6_count(self):
         count_6 = Question.objects.all().count()
         self.assertEqual(count_6, 6)
-
 
     def test_index_view_with_0(self):
         response = self.client.get('/polls/')
@@ -66,17 +70,18 @@ class QuestionTestWithHypothesis(TestCase):
     def index_test_with_hypothesis(self):
         response = self.client.get('/polls/')
         self.assertIn(q.question_text, response.content.decode())
+        self.assertIn(q.choice_set, response.content.decode())
         response2 = self.client.get('/polls/1/')
         self.assertIn(q.question_text, response2.content.decode())
+        self.assertIn(q.choice_set, response.content.decode())
         response = self.client.get('/polls/5000/')
         self.assertEqual(404, response.status_code)
 
 
 class ViewIndexQuestionTest(TestCase):
-    
+
     def setUp(self):
         pass
-
 
     def test_index_view_with_0(self):
         count_0 = Question.objects.all().count()
@@ -85,17 +90,17 @@ class ViewIndexQuestionTest(TestCase):
     def test_index_view_text_with_0(self):
         response = self.client.get('/polls/')
         self.assertIn("No polls are available.", response.content.decode())
-        
+
     def test_index_view_text_with_1(self):
         Question.objects.create(question_text="first", pub_date=timezone.now())
         count_0 = Question.objects.all().count()
         self.assertEqual(count_0, 1)
         response = self.client.get('/polls/')
         self.assertIn("first", response.content.decode())
-   
+
 
 class WritingMoreViewstest(TestCase):
-    
+
     def setUp(self):
         pass
 
@@ -103,26 +108,26 @@ class WritingMoreViewstest(TestCase):
         pass
 
     def test_detail_view(self):
-        Question.objects.create(question_text="You're looking at question 5", pub_date=timezone.now(), )
+        Question.objects.create(question_text="You're looking at question 5",
+                                pub_date=timezone.now(), )
         response = self.client.get("/polls/1/")
-        #self.assertTemplateUsed(response, 'polls/index.html')
-        #print(type(response))
-        #print(help(response))
-        self.assertEqual("You&#39;re looking at question 5\n", response.content.decode('utf8'))
+        self.assertIn("You&#39;re looking at question 5",
+                      response.content.decode('utf8'))
 
     def test_results_view(self):
         response = self.client.get("/polls/5/results/")
-        #elf.assertTemplateUsed(response, 'polls/index.html')
-        self.assertIn("You're looking at the results of question 5", response.content.decode('utf8'))
-
+        self.assertIn("You're looking at the results of question 5",
+                      response.content.decode('utf8'))
 
     def test_vote_view(self):
         response = self.client.get("/polls/5/vote/")
         #self.assertTemplateUsed(response, 'polls/index.html')
-        self.assertIn("You're voting on question 5.", response.content.decode('utf8'))
+        self.assertIn("You're voting on question 5.",
+                      response.content.decode('utf8'))
+
 
 class PollsModelTest(TestCase):
-    
+
     def test_saving_and_retrieving_items(self):
         first_question = Question()
         first_question.question_text = "What's new?"
@@ -144,9 +149,8 @@ class PollsModelTest(TestCase):
         second_saved_item = saved_items[1]
         self.assertEqual(first_saved_item.question_text, "What's new?")
         self.assertEqual(second_saved_item.question_text, "What's up?")
-        self.assertEqual(second_saved_item.pub_date, second_question.pub_date )
+        self.assertEqual(second_saved_item.pub_date, second_question.pub_date)
 
-        
     def test_was_published_recentlyd_true(self):
         first_question = Question()
         first_question.question_text = "have to be True"
@@ -160,7 +164,8 @@ class PollsModelTest(TestCase):
     def test_was_published_recentlyd_false(self):
         question = Question()
         question.question_text = "have to be False"
-        question.pub_date = datetime.datetime(2015, 1, 1, 12, 30, 59, 0, timezone.utc)
+        question.pub_date = datetime.datetime(2015, 1, 1, 12, 30, 59, 0,
+                                              timezone.utc)
         question.save()
 
         saved_item = Question.objects.all().first()
@@ -181,7 +186,6 @@ class PollsModelTest(TestCase):
         self.assertEqual(saved_item.choice_set.count(), 2)
         self.assertEqual(saved_item.choice_set.first().choice_text, 'Not much')
 
-
     def test_str(self):
         question = Question()
         question.question_text = "What's new?"
@@ -191,8 +195,9 @@ class PollsModelTest(TestCase):
         saved_item = Question.objects.all().first()
         self.assertEqual(saved_item.__str__(), "What's new?")
 
+
 class SmokeTest(TestCase):
-    
+
     def test_polls_root_url(self):
         response = self.client.get("/polls/")
         self.assertTemplateUsed(response, 'polls/index.html')
@@ -202,5 +207,4 @@ class SmokeTest(TestCase):
         response = index(request)
         html = response.content.decode('utf8')
         self.assertTrue(html.startswith('<!DOCTYPE html>'))
-        self.assertTrue(html.endswith('</html>')) 
-
+        self.assertTrue(html.endswith('</html>'))
