@@ -5,7 +5,71 @@ from django.http import HttpRequest
 from polls.models import Question, Choice
 import datetime
 from django.utils import timezone
-from selenium import webdriver
+from hypothesis.extra.django.models import models
+
+
+class SixQuestionTest(TestCase):
+    
+
+    def setUp(self):
+        q0 = Question.objects.create(question_text="zero", pub_date=timezone.now())
+        q1 = Question.objects.create(question_text="one", pub_date=timezone.now())
+        q2 = Question.objects.create(question_text="tow", pub_date=timezone.now())
+        q3 = Question.objects.create(question_text="tree", pub_date=timezone.now())
+        q4 = Question.objects.create(question_text="four", pub_date=timezone.now())
+        q5 = Question.objects.create(question_text="five", pub_date=timezone.now())
+
+    def question_6_count(self):
+        count_6 = Question.objects.all().count()
+        self.assertEqual(count_6, 6)
+
+
+    def test_index_view_with_0(self):
+        response = self.client.get('/polls/')
+        self.assertNotIn("zero", response.content.decode())
+        response_zero = self.client.get('/polls/1/')
+        self.assertIn("zero", response_zero.content.decode())
+
+    def test_index_view_with_1(self):
+        response = self.client.get('/polls/')
+        self.assertIn("one", response.content.decode())
+
+    def test_index_view_with_2(self):
+        response = self.client.get('/polls/')
+        self.assertIn("tow", response.content.decode())
+
+    def test_index_view_with_3(self):
+        response = self.client.get('/polls/')
+        self.assertIn("tree", response.content.decode())
+
+    def test_index_view_with_4(self):
+        response = self.client.get('/polls/')
+        self.assertIn("four", response.content.decode())
+
+    def test_index_view_with_5(self):
+        response = self.client.get('/polls/')
+        self.assertIn("five", response.content.decode())
+
+    def test_index_view_with_6(self):
+        response = self.client.get('/polls/')
+        self.assertNotIn("six", response.content.decode())
+
+
+class QuestionTestWithHypothesis(TestCase):
+
+    def setUp(self):
+        q = models(Question).example()
+
+    def tearDown(self):
+        pass
+
+    def index_test_with_hypothesis(self):
+        response = self.client.get('/polls/')
+        self.assertIn(q.question_text, response.content.decode())
+        response2 = self.client.get('/polls/1/')
+        self.assertIn(q.question_text, response2.content.decode())
+        response = self.client.get('/polls/5000/')
+        self.assertEqual(404, response.status_code)
 
 
 class ViewIndexQuestionTest(TestCase):
@@ -13,11 +77,9 @@ class ViewIndexQuestionTest(TestCase):
     def setUp(self):
         pass
 
-    def tearDown(self):
-        pass
 
     def test_index_view_with_0(self):
-        count_0 = Question.objects.all().count()           
+        count_0 = Question.objects.all().count()
         self.assertEqual(count_0, 0)
 
     def test_index_view_text_with_0(self):
@@ -26,7 +88,7 @@ class ViewIndexQuestionTest(TestCase):
         
     def test_index_view_text_with_1(self):
         Question.objects.create(question_text="first", pub_date=timezone.now())
-        count_0 = Question.objects.all().count()           
+        count_0 = Question.objects.all().count()
         self.assertEqual(count_0, 1)
         response = self.client.get('/polls/')
         self.assertIn("first", response.content.decode())
@@ -41,11 +103,12 @@ class WritingMoreViewstest(TestCase):
         pass
 
     def test_detail_view(self):
-        response = self.client.get("/polls/5/")
+        Question.objects.create(question_text="You're looking at question 5", pub_date=timezone.now(), )
+        response = self.client.get("/polls/1/")
         #self.assertTemplateUsed(response, 'polls/index.html')
         #print(type(response))
         #print(help(response))
-        self.assertEqual("You're looking at question 5.", response.content.decode('utf8'))
+        self.assertEqual("You&#39;re looking at question 5\n", response.content.decode('utf8'))
 
     def test_results_view(self):
         response = self.client.get("/polls/5/results/")
