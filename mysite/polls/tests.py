@@ -23,6 +23,7 @@ class SixQuestionTest(TestCase):
                                      pub_date=timezone.now())
         q5 = Question.objects.create(question_text="five",
                                      pub_date=timezone.now())
+        q5.choice_set.create(choice_text="Chice Text on Five")
 
     def question_6_count(self):
         count_6 = Question.objects.all().count()
@@ -57,6 +58,12 @@ class SixQuestionTest(TestCase):
     def test_index_view_with_6(self):
         response = self.client.get('/polls/')
         self.assertNotIn("six", response.content.decode())
+
+    def test_vote_view(self):
+        response = self.client.get("/polls/6/vote/")
+        #self.assertTemplateUsed(response, 'polls/index.html')
+        self.assertIn("five",
+                      response.content.decode('utf8'))
 
 
 class QuestionTestWithHypothesis(TestCase):
@@ -117,12 +124,6 @@ class WritingMoreViewstest(TestCase):
     def test_results_view(self):
         response = self.client.get("/polls/5/results/")
         self.assertIn("You're looking at the results of question 5",
-                      response.content.decode('utf8'))
-
-    def test_vote_view(self):
-        response = self.client.get("/polls/5/vote/")
-        #self.assertTemplateUsed(response, 'polls/index.html')
-        self.assertIn("You're voting on question 5.",
                       response.content.decode('utf8'))
 
 
