@@ -8,6 +8,46 @@ from django.utils import timezone
 from hypothesis.extra.django.models import models
 
 
+"""
+Ideas for reorganizing the test.  
+
+1st. Separate the model test with views test.  
+2nd. Separate each view test with each function name in view.  
+
+3rd. Test models edge cases.  
+- Same input twice -> result just one. For question text.  
+"""
+
+
+class QuestionModelTest(TestCase):
+    pass
+
+
+class ChoiceModelTest(TestCase):
+    pass
+
+
+class indexViewTest(TestCase):
+    pass
+
+
+class detailViewTest(TestCase):
+    pass
+
+
+class resultsViewTest(TestCase):
+    pass
+
+
+class voteViewTest(TestCase):
+
+    def test_vote_view(self):
+        response = self.client.get("/polls/6/vote/")
+        #self.assertTemplateUsed(response, 'polls/index.html')
+        self.assertIn("five",
+                      response.content.decode('utf8'))
+
+
 class SixQuestionTest(TestCase):
 
     def setUp(self):
@@ -58,12 +98,6 @@ class SixQuestionTest(TestCase):
     def test_index_view_with_6(self):
         response = self.client.get('/polls/')
         self.assertNotIn("six", response.content.decode())
-
-    def test_vote_view(self):
-        response = self.client.get("/polls/6/vote/")
-        #self.assertTemplateUsed(response, 'polls/index.html')
-        self.assertIn("five",
-                      response.content.decode('utf8'))
 
 
 class QuestionTestWithHypothesis(TestCase):
