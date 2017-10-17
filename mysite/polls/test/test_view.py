@@ -27,6 +27,26 @@ class indexViewTest(TestCase):
         self.assertEqual(404, response.status_code)
 
 
+class index0QuestionViewTest(TestCase):
+    
+    def setUp(self):
+        pass
+
+    def tearDown(self):
+        pass
+
+    def test_index_view_text_with_0(self):
+        response = self.client.get('/polls/')
+        self.assertIn("No polls are available.", response.content.decode())
+
+    def test_index_view_text_with_1(self):
+        Question.objects.create(question_text="first", pub_date=timezone.now())
+        count_0 = Question.objects.all().count()
+        self.assertEqual(count_0, 1)
+        response = self.client.get('/polls/')
+        self.assertIn("first", response.content.decode())
+
+
 class detailViewTest(TestCase):
 
     def setUp(self):
@@ -73,7 +93,7 @@ class voteViewTest(TestCase):
                       response.content.decode('utf8'))
 
 
-class SixQuestionTest(TestCase):
+class SixQuestionIndexTest(TestCase):
 
     def setUp(self):
         q0 = Question.objects.create(question_text="zero",

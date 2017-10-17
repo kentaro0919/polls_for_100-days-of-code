@@ -36,17 +36,6 @@ class ViewIndexQuestionTest(TestCase):
         count_0 = Question.objects.all().count()
         self.assertEqual(count_0, 0)
 
-    def test_index_view_text_with_0(self):
-        response = self.client.get('/polls/')
-        self.assertIn("No polls are available.", response.content.decode())
-
-    def test_index_view_text_with_1(self):
-        Question.objects.create(question_text="first", pub_date=timezone.now())
-        count_0 = Question.objects.all().count()
-        self.assertEqual(count_0, 1)
-        response = self.client.get('/polls/')
-        self.assertIn("first", response.content.decode())
-
 
 class PollsModelTest(TestCase):
 
