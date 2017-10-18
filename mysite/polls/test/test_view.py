@@ -28,7 +28,7 @@ class indexViewTest(TestCase):
 
 
 class index0QuestionViewTest(TestCase):
-    
+
     def setUp(self):
         pass
 
@@ -91,6 +91,25 @@ class voteViewTest(TestCase):
         q = Question.objects.get(pk=1)
         self.assertIn(q.question_text,
                       response.content.decode('utf8'))
+
+    def test_vote_no_choice(self):
+        response = self.client.post("/polls/1/vote/")
+        q = Question.objects.get(pk=1)
+        self.assertIn(q.question_text,
+                      response.content.decode('utf8'))
+        self.assertIn("You didn&#39;t select a choice.",
+                      response.content.decode('utf8'))
+        self.assertEqual(200, response.status_code)
+
+    def test_vote_with_choice(self):
+        ## not working
+        q = Question.objects.get(pk=1)
+        response = self.client.post(
+            "/polls/1/vote/", data={"Vote": 1})
+        self.assertIn(q.question_text, response.content.decode())
+        self.assertEqual(response.status_code, 200)
+        #self.assertRedirects(response, '/polls/1/results/', status_code=200)
+        #self.assertEqual(response['location'], '/polls/1/results/')
 
 
 class SixQuestionIndexTest(TestCase):
