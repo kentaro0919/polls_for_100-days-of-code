@@ -1,6 +1,6 @@
 from django.urls import resolve
 from django.test import TestCase
-from polls.views import index
+
 from django.http import HttpRequest
 from polls.models import Question, Choice
 import datetime
@@ -105,17 +105,3 @@ class PollsModelTest(TestCase):
 
         saved_item = Question.objects.all().first()
         self.assertEqual(saved_item.__str__(), "What's new?")
-
-
-class SmokeTest(TestCase):
-
-    def test_polls_root_url(self):
-        response = self.client.get("/polls/")
-        self.assertTemplateUsed(response, 'polls/index.html')
-
-    def test_index_returns_correct_html(self):
-        request = HttpRequest()
-        response = index(request)
-        html = response.content.decode('utf8')
-        self.assertTrue(html.startswith('<!DOCTYPE html>'))
-        self.assertTrue(html.endswith('</html>'))

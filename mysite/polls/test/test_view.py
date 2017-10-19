@@ -1,6 +1,6 @@
 from django.urls import resolve
 from django.test import TestCase
-from polls.views import index
+
 from django.http import HttpRequest
 from polls.models import Question, Choice
 import datetime
