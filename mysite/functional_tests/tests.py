@@ -40,6 +40,8 @@ class mayNotworkTest(LiveServerTestCase):
         # help(self.browser)
         self.assertEqual("Hello, world. You're at the polls index.",
                          self.browser.find_element_by_id("TopTitle").text)
+        self.assertIn(
+            "link", self.browser.find_element_by_xpath("/html/head/link"))
 
 
 class NewPollsTest(LiveServerTestCase):
