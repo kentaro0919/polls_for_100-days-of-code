@@ -3,6 +3,10 @@ from django.test import LiveServerTestCase
 from django.test import TestCase
 from polls.models import Question, Choice
 from django.utils import timezone
+from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
+
+binary = FirefoxBinary('/Applications/Firefox.app/Contents/MacOS/firefox-bin')
+browser = webdriver.Firefox(firefox_binary=binary)
 
 
 class DiteirViewChoiceTest(LiveServerTestCase):
@@ -12,7 +16,8 @@ class DiteirViewChoiceTest(LiveServerTestCase):
         q.save()
         q.choice_set.create(choice_text='choice_text', votes=0)
         q.save()
-        self.browser = webdriver.Safari()
+        #self.browser = webdriver.Safari()
+        self.browser = webdriver.Firefox()
 
     def tearDown(self):
         self.browser.quit()
@@ -40,8 +45,6 @@ class mayNotworkTest(LiveServerTestCase):
         # help(self.browser)
         self.assertEqual("Hello, world. You're at the polls index.",
                          self.browser.find_element_by_id("TopTitle").text)
-        self.assertIn(
-            "link", self.browser.find_element_by_xpath("/html/head/link"))
 
 
 class NewPollsTest(LiveServerTestCase):
