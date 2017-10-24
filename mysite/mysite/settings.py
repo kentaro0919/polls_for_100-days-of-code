@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django_extensions',
     # My Apps
     "polls.apps.PollsConfig",
+    "preservedrecipe.apps.PreservedrecipeConfig"
 ]
 
 MIDDLEWARE = [

@@ -16,7 +16,7 @@ class DiteirViewChoiceTest(LiveServerTestCase):
         q.save()
         q.choice_set.create(choice_text='choice_text', votes=0)
         q.save()
-        #self.browser = webdriver.Safari()
+        # self.browser = webdriver.Safari()
         self.browser = webdriver.Firefox()
 
     def tearDown(self):
