@@ -1,12 +1,36 @@
+import datetime
+
 from django.db import models
 from django.conf import settings
+from django.utils import timezone
 from django_extensions.db.fields import (CreationDateTimeField,
                                          ModificationDateTimeField)
 
 
+class Classification(models.Model):
+    classification_text = models.CharField(max_length=200)
+    classification = models.ForeignKey('self',
+                                       on_delete=models.CASCADE,
+                                       blank=True,
+                                       null=True,
+                                       related_name="class_class"
+                                       )
+    created = CreationDateTimeField()
+    modified = ModificationDateTimeField()
+
+    def __str__(self):
+        if self.classification:
+            return f"{self.classification} > {self.classification_text}"
+        else:
+            return self.classification_text
+
+
 class IngredientMaster(models.Model):
+    classification = models.ForeignKey(Classification,
+                                       on_delete=models.CASCADE,
+                                       related_name="Ingredient_class")
     name = models.CharField(max_length=200, default="")
-    text = models.CharField(max_length=200, default="")
+    text = models.TextField(max_length=200, default="")
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -15,8 +39,14 @@ class IngredientMaster(models.Model):
     created = CreationDateTimeField()
     modified = ModificationDateTimeField()
 
+    def __str__(self):
+        return self.name
+
 
 class Recipe(models.Model):
+    classification = models.ForeignKey(Classification,
+                                       on_delete=models.CASCADE,
+                                       related_name="Recipe_class")
     title = models.CharField(max_length=200, default="")
     pub_date = models.DateTimeField('date published')
     author = models.ForeignKey(
@@ -67,7 +97,7 @@ class RecipeStep(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     step_number = models.IntegerField()
     name = models.CharField(max_length=200, default="")
-    text = models.CharField(max_length=200, default="")
+    text = models.TextField(max_length=200, default="")
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,

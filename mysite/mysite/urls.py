@@ -19,5 +19,6 @@ from django.contrib import admin
 urlpatterns = [
     url(r"^polls/", include("polls.urls")),
     url(r"^qumi/", include("preservedrecipe.urls")),
+    url(r'^_nested_admin/', include('nested_admin.urls')),
     url(r'^admin/', admin.site.urls),
 ]

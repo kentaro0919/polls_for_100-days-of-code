@@ -38,7 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # 3rd party apps
+    'nested_admin',
     'django_extensions',
+    'rest_framework',
+    'django_filters',
     # My Apps
     "polls.apps.PollsConfig",
     "preservedrecipe.apps.PreservedrecipeConfig"
@@ -123,3 +126,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATIC_ROOT = "../../static/"
+
+# REST
+# http://www.django-rest-framework.org/
+# REST_FRAMEWORK = {
+#     'DEFAULT_MODEL_SERIALIZER_CLASS':
+#         'rest_framework.serializers.HyperlinkedModelSerializer',
+#     'DEFAULT_PERMISSION_CLASSES': [
+#         'rest_framework.permissions.IsAdminUser',
+#     ],
+#     'PAGE_SIZE': 10
+# }
