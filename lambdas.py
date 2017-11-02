@@ -1,5 +1,6 @@
 import datetime
 import calendar
+import maya
 
 
 year = int(input("年"))
