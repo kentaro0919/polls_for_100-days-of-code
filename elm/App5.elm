@@ -1,0 +1,71 @@
+module Main exposing (..)
+
+import Html exposing (Html, button, div, text, program)
+import Html.Events exposing (onClick)
+import Random
+
+-- MODEL
+
+
+type alias Model =
+   Int 
+
+
+init : (Model, Cmd Msg)
+init = 
+    ( 1, Cmd.none )
+
+
+-- MESSAGES
+
+
+type Msg
+    = Roll
+    | OnResult Int
+
+
+-- VIEW
+
+
+view : Model -> Html Msg
+view model =
+    div []
+            [ button [ onClick Roll] [ text "Roll"]
+            , text (toString model)
+            ]
+
+
+-- UPDATE
+
+
+update : Msg -> Model -> (Model, Cmd Msg)
+update msg model =
+    case msg of
+        Roll ->
+            ( model, Random.generate OnResult (Random.int 1 6 ))
+        OnResult res ->
+            ( res, Cmd.none )
+
+
+-- SUBSCRIPTION
+
+
+--subscriptions : Model -> Sub Msg
+--subscriptions model =
+ --   Sub.batch
+ --       [ Mouse.clicks MouseMsg
+--        , Keyboard.downs KeyMsg
+ --       ]
+
+
+-- MAIN
+
+
+main =
+    program
+        { init = init
+        , view = view
+        , update = update
+        , subscriptions = (always Sub.none)
+        --subscriptions
+        }
